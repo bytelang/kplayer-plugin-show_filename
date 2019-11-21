@@ -18,8 +18,6 @@ extern "C" {
 
 #include <utility>
 
-#include "config.h"
-
 extern KPEvent<std::string> global_event_play;
 
 class KPVideoShowFileNamePlugin : public KPPluginAdapter {
