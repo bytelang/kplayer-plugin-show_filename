@@ -8,8 +8,6 @@
 
 #include "KPVideoShowFileNamePlugin.h"
 
-#include <utility>
-
 KPVideoShowFileNamePlugin::KPVideoShowFileNamePlugin(const std::string &identify_name, PluginParams params) : KPPluginAdapter(identify_name), params(params) {
     // 赋值信息
     filter_type = KP_FILTER_TYPE_VIDEO;
@@ -51,6 +49,9 @@ void KPVideoShowFileNamePlugin::Task() {
     });
 }
 
+void KPVideoShowFileNamePlugin::KillTask() {
+}
+
 int KPVideoShowFileNamePlugin::ChangeTitle(const std::string &file_path) {
     KPlayer::FileInfo file_info(file_path);
     std::string       title = show_extension ? file_info.GetFileName() : file_info.GetBaseFileName();
@@ -75,6 +76,5 @@ int KPVideoShowFileNamePlugin::ChangeTitle(const std::string &file_path) {
 
 // slot
 __attribute__ ((visibility ("default"))) KPVideoShowFileNamePlugin *CreateInstance(PluginParams params) {
-    auto a = params["font_size"];
     return new KPVideoShowFileNamePlugin("kplayer", std::move(params));
 }
