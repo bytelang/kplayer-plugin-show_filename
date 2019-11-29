@@ -52,6 +52,9 @@ void KPVideoShowFileNamePlugin::Task() {
 void KPVideoShowFileNamePlugin::KillTask() {
 }
 
+void KPVideoShowFileNamePlugin::InitTask() {
+}
+
 int KPVideoShowFileNamePlugin::ChangeTitle(const std::string &file_path) {
     KPlayer::FileInfo file_info(file_path);
     std::string       title = show_extension ? file_info.GetFileName() : file_info.GetBaseFileName();
