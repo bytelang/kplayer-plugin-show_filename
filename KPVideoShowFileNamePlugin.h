@@ -32,6 +32,7 @@ public:
     explicit KPVideoShowFileNamePlugin(const std::string &identify_name, PluginParams params);
     ~KPVideoShowFileNamePlugin() override;
     void KillTask() override ;
+    void InitTask() override ;
 };
 
 
