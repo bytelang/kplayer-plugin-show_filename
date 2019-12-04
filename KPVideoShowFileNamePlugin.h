@@ -12,6 +12,8 @@
 #include "adapter/KPPluginAdapter.h"
 #include "util/KPHelper.h"
 
+#include "config.h"
+
 extern "C" {
 #include <libavutil/error.h>
 }
@@ -31,14 +33,13 @@ protected:
 public:
     explicit KPVideoShowFileNamePlugin(const std::string &identify_name, PluginParams params);
     ~KPVideoShowFileNamePlugin() override;
-    void KillTask() override ;
-    void InitTask() override ;
+    void KillTask() override;
+    void InitTask() override;
 };
-
 
 // slot
 extern "C" {
-__attribute__ ((visibility ("default"))) KPVideoShowFileNamePlugin *CreateInstance(PluginParams params);
+KPLAYER_PLUGIN_FUNC(KPVideoShowFileNamePlugin);
 }
 
 #endif //KPLAYER_KPVIDEOSHOWFILENAMEPLUGIN_H
