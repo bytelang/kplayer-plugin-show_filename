@@ -76,8 +76,6 @@ int KPVideoShowFileNamePlugin::ChangeTitle(const std::string &file_path) {
     return 0;
 }
 
-
-// slot
-__attribute__ ((visibility ("default"))) KPVideoShowFileNamePlugin *CreateInstance(PluginParams params) {
+KPLAYER_PLUGIN_FUNC(KPVideoShowFileNamePlugin) {
     return new KPVideoShowFileNamePlugin("kplayer", std::move(params));
 }
