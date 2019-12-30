@@ -40,11 +40,14 @@ KPVideoShowFileNamePlugin::~KPVideoShowFileNamePlugin() {
 
 void KPVideoShowFileNamePlugin::Task() {
     // 初始化当前文件名
-    ChangeTitle(global_event_play.GetLastVariable());
+    auto current_title = global_event_play.GetLastVariable();
+    logger->debug("获取到当前播放标题为: {}", current_title);
+    ChangeTitle(current_title);
 
 
     // 监听下一次文件播放更改
     event_id = global_event_play.Subscribe([&](const std::string &file_path) {
+        logger->debug("接收到事件通知，数据为：{}", file_path);
         ChangeTitle(file_path);
     });
 }
@@ -53,6 +56,10 @@ void KPVideoShowFileNamePlugin::KillTask() {
 }
 
 void KPVideoShowFileNamePlugin::InitTask() {
+    // 初始化当前文件名
+    auto current_title = global_event_play.GetLastVariable();
+    logger->debug("获取到当前播放标题为: {}", current_title);
+    ChangeTitle(current_title);
 }
 
 int KPVideoShowFileNamePlugin::ChangeTitle(const std::string &file_path) {
@@ -77,5 +84,5 @@ int KPVideoShowFileNamePlugin::ChangeTitle(const std::string &file_path) {
 }
 
 KPLAYER_PLUGIN_FUNC(KPVideoShowFileNamePlugin) {
-    return new KPVideoShowFileNamePlugin("kplayer", std::move(params));
+        return new KPVideoShowFileNamePlugin("kplayer", std::move(params));
 }
