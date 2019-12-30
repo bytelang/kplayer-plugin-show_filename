@@ -56,6 +56,10 @@ void KPVideoShowFileNamePlugin::KillTask() {
 }
 
 void KPVideoShowFileNamePlugin::InitTask() {
+    // 初始化当前文件名
+    auto current_title = global_event_play.GetLastVariable();
+    logger->debug("获取到当前播放标题为: {}", current_title);
+    ChangeTitle(current_title);
 }
 
 int KPVideoShowFileNamePlugin::ChangeTitle(const std::string &file_path) {
