@@ -8,11 +8,9 @@
 
 #include "KPVideoShowFileNamePlugin.h"
 
-KPVideoShowFileNamePlugin::KPVideoShowFileNamePlugin(const std::string &identify_name, PluginParams params) : KPPluginAdapter(identify_name), params(params) {
-    // 赋值信息
-    filter_type = KP_FILTER_TYPE_VIDEO;
-    filter_name = "video_plugin_show_file_name";
+#include <utility>
 
+KPVideoShowFileNamePlugin::KPVideoShowFileNamePlugin(const std::string &identify_name, const std::string &filter_name, const KPFilterType &filter_type, PluginParams params) : KPPluginAdapter(identify_name, filter_name, filter_type), params(params) {
     // 赋值described
     std::stringstream filter_desc_stream;
 
@@ -25,7 +23,7 @@ KPVideoShowFileNamePlugin::KPVideoShowFileNamePlugin(const std::string &identify
         font_color = params["font_color"];
     }
 
-    filter_desc_stream << "x=10:y=10:fontfile=Res/font.ttf:fontsize=" << font_size << ":fontcolor=" << font_color << ":text='" << "[无]" << "'";
+    filter_desc_stream << "x=10:y=10:fontfile=res/font.ttf:fontsize=" << font_size << ":fontcolor=" << font_color << ":text='" << "[无]" << "'";
     filter_desc = filter_desc_stream.str();
 
     // 查找过滤器
@@ -84,5 +82,5 @@ int KPVideoShowFileNamePlugin::ChangeTitle(const std::string &file_path) {
 }
 
 KPLAYER_PLUGIN_FUNC(KPVideoShowFileNamePlugin) {
-        return new KPVideoShowFileNamePlugin("kplayer", std::move(params));
+    return new KPVideoShowFileNamePlugin("kplayer", "video_plugin_show_file_name", KP_FILTER_TYPE_VIDEO, std::move(params));
 }

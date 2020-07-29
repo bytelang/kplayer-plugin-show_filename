@@ -31,7 +31,7 @@ protected:
 protected:
     int ChangeTitle(const std::string &);
 public:
-    explicit KPVideoShowFileNamePlugin(const std::string &identify_name, PluginParams params);
+    explicit KPVideoShowFileNamePlugin(const std::string &identify_name, const std::string &filter_name, const KPFilterType &filter_type, PluginParams params);
     ~KPVideoShowFileNamePlugin() override;
     void KillTask() override;
     void InitTask() override;
