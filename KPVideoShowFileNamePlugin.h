@@ -17,7 +17,6 @@
 extern "C" {
 #include <libavutil/error.h>
 }
-
 #include <utility>
 
 extern KPEvent<std::string> global_event_play;
@@ -27,11 +26,10 @@ protected:
     void Task() override;
     uint64_t     event_id       = -1;
     bool         show_extension = false;
-    PluginParams params;
 protected:
     int ChangeTitle(const std::string &);
 public:
-    explicit KPVideoShowFileNamePlugin(const std::string &identify_name, const std::string &filter_name, const KPFilterType &filter_type, PluginParams params);
+    explicit KPVideoShowFileNamePlugin(const std::string &identify_name, const std::string &filter_name, const KPFilterType &filter_type, PluginParamsObject plugin_params_object);
     ~KPVideoShowFileNamePlugin() override;
     void KillTask() override;
     void InitTask() override;
