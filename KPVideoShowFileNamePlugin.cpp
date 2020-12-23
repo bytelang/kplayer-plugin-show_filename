@@ -12,10 +12,6 @@ KPVideoShowFileNamePlugin::KPVideoShowFileNamePlugin(const std::string &identify
     // 赋值described
     std::stringstream filter_desc_stream;
 
-    std::string font_size  = "17";
-    std::string font_color = "white";
-    std::string x          = "10";
-    std::string y          = "10";
 
     if (plugin_params_object.params.find("font_size") != plugin_params_object.params.end()) {
         font_size = plugin_params_object.params["font_size"];
@@ -29,6 +25,9 @@ KPVideoShowFileNamePlugin::KPVideoShowFileNamePlugin(const std::string &identify
     if (plugin_params_object.params.find("y") != plugin_params_object.params.end()) {
         y = plugin_params_object.params["y"];
     }
+    if (plugin_params_object.params.find("show_extension") != plugin_params_object.params.end()) {
+        show_extension = plugin_params_object.params["show_extension"];
+    }
 
     filter_desc_stream << "x=" << x << ":y=" << y << ":fontfile=res/font.ttf:fontsize=" << font_size << ":fontcolor=" << font_color << ":text='" << "[无]" << "'";
 
@@ -41,18 +40,18 @@ KPVideoShowFileNamePlugin::KPVideoShowFileNamePlugin(const std::string &identify
 }
 
 KPVideoShowFileNamePlugin::~KPVideoShowFileNamePlugin() {
-    global_event_play.Unsubscribe(event_id);
+    global_event_play_updated.Unsubscribe(event_id);
 }
 
 void KPVideoShowFileNamePlugin::Task() {
     // 初始化当前文件名
-    auto current_title = global_event_play.GetLastVariable();
+    auto current_title = global_event_play_updated.GetLastVariable();
     logger->debug("获取到当前播放标题为: {}", current_title);
     ChangeTitle(current_title);
 
 
     // 监听下一次文件播放更改
-    event_id = global_event_play.Subscribe([&](const std::string &file_path) {
+    event_id = global_event_play_updated.Subscribe([&](const std::string &file_path) {
         logger->debug("接收到事件通知，数据为：{}", file_path);
         ChangeTitle(file_path);
     });
@@ -63,14 +62,14 @@ void KPVideoShowFileNamePlugin::KillTask() {
 
 void KPVideoShowFileNamePlugin::InitTask() {
     // 初始化当前文件名
-    auto current_title = global_event_play.GetLastVariable();
+    auto current_title = global_event_play_updated.GetLastVariable();
     logger->debug("获取到当前播放标题为: {}", current_title);
     ChangeTitle(current_title);
 }
 
 int KPVideoShowFileNamePlugin::ChangeTitle(const std::string &file_path) {
     KPlayer::FileInfo file_info(file_path);
-    std::string       title = show_extension ? file_info.GetFileName() : file_info.GetBaseFileName();
+    std::string       title = show_extension == "1" ? file_info.GetFileName() : file_info.GetBaseFileName();
 
     AVDictionary *dict = nullptr;
 
