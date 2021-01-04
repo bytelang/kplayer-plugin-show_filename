@@ -46,13 +46,11 @@ KPVideoShowFileNamePlugin::~KPVideoShowFileNamePlugin() {
 void KPVideoShowFileNamePlugin::Task() {
     // 初始化当前文件名
     auto current_title = global_event_play_updated.GetLastVariable();
-    logger->debug("获取到当前播放标题为: {}", current_title);
     ChangeTitle(current_title);
 
 
     // 监听下一次文件播放更改
     event_id = global_event_play_updated.Subscribe([&](const std::string &file_path) {
-        logger->debug("接收到事件通知，数据为：{}", file_path);
         ChangeTitle(file_path);
     });
 }
@@ -63,29 +61,15 @@ void KPVideoShowFileNamePlugin::KillTask() {
 void KPVideoShowFileNamePlugin::InitTask() {
     // 初始化当前文件名
     auto current_title = global_event_play_updated.GetLastVariable();
-    logger->debug("获取到当前播放标题为: {}", current_title);
     ChangeTitle(current_title);
 }
 
 int KPVideoShowFileNamePlugin::ChangeTitle(const std::string &file_path) {
-    KPlayer::FileInfo file_info(file_path);
-    std::string       title = show_extension == "1" ? file_info.GetFileName() : file_info.GetBaseFileName();
+    KPlayer::FileInfo                  file_info(file_path);
+    std::string                        title = show_extension == "1" ? file_info.GetFileName() : file_info.GetBaseFileName();
+    std::map<std::string, std::string> value{{"text", title}};
 
-    AVDictionary *dict = nullptr;
-
-    void *priv = GetFilterPriv();
-    if (!priv) {
-        logger->error("无法对plugin option进行设置; error: {}", "priv为空");
-        return -1;
-    }
-
-    av_dict_set(& dict, "text", title.c_str(), 0);
-    int ret = av_opt_set_dict(priv, & dict);
-    if (ret < 0) {
-        logger->error("无法对plugin option进行设置;");
-        return ret;
-    }
-    return 0;
+    return SetPluginValue(value);
 }
 
 KPLAYER_PLUGIN_FUNC(KPVideoShowFileNamePlugin) {
